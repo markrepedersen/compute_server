@@ -2,6 +2,7 @@ use actix_files::Files;
 use actix_web::{App, HttpServer};
 
 mod routes;
+mod validate;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

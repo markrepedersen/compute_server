@@ -1,24 +1,47 @@
-document.addEventListener('dragover', function(e) {
-    const dropZone = document.getElementById("dropZone")
-    let found = false;
-    let node = e.target;
-    
-    do {
-	if (node === dropZone[0]) {
-	    found = true;
-	    break;
-	}
-	node = node.parentNode;
-    } while (node != null);
+const dropZone = document.getElementById("dropZone");
+const fileInput = document.getElementById("files");
+const IMPORT_ROUTE = "/import";
 
-    if (found) {
-	dropZone.addClass('hover');
+dropZone.addEventListener("drop", dropHandler)
+dropZone.addEventListener("dragover", function (e) {
+    e.preventDefault();
+})
+
+fileInput.addEventListener("change", function(e) {
+    sendFiles(fileInput.files)
+})
+
+function dropHandler(event) {
+    const files = [];
+    
+    event.preventDefault();
+
+    if (event.dataTransfer.items) {
+	for (var i = 0; i < event.dataTransfer.items.length; i++) {
+	    if (event.dataTransfer.items[i].kind === 'file') {
+		files.push(event.dataTransfer.items[i].getAsFile());
+	    }
+	}
     } else {
-	dropZone.removeClass('hover');
+	for (var i = 0; i < event.dataTransfer.files.length; i++) {
+	    files.push(event.dataTransfer.files[i]);
+	}
     }
 
-    window.dropZoneTimeout = setTimeout(function() {
-	window.dropZoneTimeout = null;
-	dropZone.removeClass('in hover');
-    }, 100);
-});
+    sendFiles(files);
+}
+
+// Sends the selected files to the server.
+async function sendFiles(files) {
+    let formData = new FormData();
+
+    for (const file of files) {
+	console.log(file.name);
+	formData.append('files[]', file, file.name);	
+    }
+
+    const response = await fetch(IMPORT_ROUTE, {
+	method: "POST",
+	body: formData
+    });
+}

@@ -31,12 +31,14 @@ body {
   color: #fff;
   margin-top: 50px;
 }
+
 .zone .selectFile {
   height: 50px;
   margin: 20px auto;
   position: relative;
   width: 200px;
 }
+
 .zone label, .zone input {
   cursor: pointer;
   display: block;
