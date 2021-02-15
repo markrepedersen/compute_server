@@ -1,9 +1,10 @@
 version: "3.9"
+
 services:
   server:
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      
   database:
     image: mariadb:10.5.8
     restart: always
@@ -12,4 +13,25 @@ services:
       - ./dump/:/docker-entrypoint-initdb.d/
     environment:
       MYSQL_ROOT_PASSWORD: admin
+      version: "3.8"
+
+  consul:
+    image: consul:1.9.3
+    ports:
+      - 8500:8500
+    volumes:
+      - ./consul/config:/consul/config
+      - ./consul/data:/consul/data
+    command: agent -server -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect 1
     
+  vault:
+    image: vault:1.6.2
+    volumes:
+      - ./vault/config:/vault/config
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+    cap_add:
+      - IPC_LOCK
+    depends_on:
+      - consul
+    command: server 

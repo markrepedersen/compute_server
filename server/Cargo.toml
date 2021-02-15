@@ -1,0 +1,15 @@
+[package]
+name = "LCT_Server"
+description = "Liability Compression Server Tool"
+version = "0.1.0"
+authors = ["Mark Pedersen <markpedersen@kpmg.ca>"]
+edition = "2018"
+
+[dependencies]
+actix-web = "3"
+actix-multipart = "0.3.0"
+actix-files = "0.5.0"
+futures = "0.3.12"
+sqlx = { version = "0.5", features = ["runtime-tokio-rustls", "mysql", "macros", "tls"] }
+validation = { path = "../validation" }
+computation = { path = "../computation" }
