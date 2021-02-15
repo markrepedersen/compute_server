@@ -1,0 +1,14 @@
+@import url(http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css);
+
+.top {
+    width:70%;
+    height:300px;
+    position:absolute;
+}
+
+.bottom {
+    width:40%;
+    height:200px;
+    position: relative;
+    top: 315px;
+}
