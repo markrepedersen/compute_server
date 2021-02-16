@@ -3,6 +3,8 @@ use std::{fs::File, io::Write};
 use actix_multipart::Multipart;
 use actix_web::{post, Error, HttpResponse};
 use futures::{StreamExt, TryStreamExt};
+use validation::validate_data;
+use computation::compute;
 
 #[post("/import")]
 async fn import(mut payload: Multipart) -> Result<HttpResponse, Error> {
@@ -21,6 +23,9 @@ async fn import(mut payload: Multipart) -> Result<HttpResponse, Error> {
             }
         }
     }
+
+    validate_data(path);
+    compute(path);
 
     Ok(match is_file_upload {
         false => HttpResponse::BadRequest().into(),
